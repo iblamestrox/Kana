@@ -349,22 +349,31 @@
             body {
                 background: url('bg.jpg') no-repeat center center fixed;
                 background-size: cover;
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                padding-top: 8vh;
             }
 
+            /* Time centered above the focus timer per the new wireframe */
             .live-clock {
-                top: 1.5rem;
-                left: 1.5rem;
-                font-size: 1rem;
+                position: static;
+                text-align: center;
+                width: 100%;
+                font-size: 1.2rem;
+                margin-bottom: 0.5rem;
+                color: #e2e8f0;
             }
 
+            /* History toggle hidden; logs are now permanently visible */
             .toggle-history-btn {
-                top: 1.5rem;
-                right: 1.5rem;
+                display: none; 
             }
 
-            .toggle-history-btn img {
-                width: 24px;
-                height: 24px;
+            .main-container {
+                height: auto;
+                margin-top: 0;
+                margin-bottom: 2rem;
             }
 
             .stopwatch-display {
@@ -390,9 +399,71 @@
                 padding: 1.5rem;
             }
 
+            /* Permanently visible bottom log section */
             .history-panel {
+                position: relative;
                 width: 100%;
-                right: -100%; 
+                right: 0;
+                height: auto;
+                flex-grow: 1;
+                border-left: none;
+                border-top: 1px solid rgba(59, 130, 246, 0.2);
+                border-radius: 24px 24px 0 0;
+                background-color: rgba(15, 23, 42, 0.5); /* Increased transparency */
+                backdrop-filter: blur(10px);
+                margin-top: auto;
+                padding: 1.5rem 1rem;
+            }
+
+            .history-header {
+                border-bottom: none;
+                margin-bottom: 1rem;
+                padding-bottom: 0;
+            }
+
+            .history-header h2 {
+                font-size: 1.1rem;
+                color: #e2e8f0;
+            }
+
+            /* Hide export/close actions to match the clean wireframe */
+            .header-actions {
+                display: none;
+            }
+
+            /* Relocated "Total Time" to align horizontally with "Logs" */
+            .daily-total-box {
+                position: absolute;
+                top: 1.5rem;
+                right: 1.5rem;
+                background: transparent;
+                border: none;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                gap: 0.3rem;
+            }
+
+            /* Swapping the default "Total Today" text for "Total Time:" to match wireframe */
+            .daily-total-label {
+                font-size: 0; 
+                margin-bottom: 0;
+            }
+
+            .daily-total-label::before {
+                content: "Total Time:";
+                font-size: 1rem;
+                color: #e2e8f0;
+            }
+
+            .daily-total-time {
+                font-size: 1rem;
+                color: #e2e8f0;
+                font-weight: 400;
+            }
+
+            .history-list {
+                margin-bottom: 0;
             }
         }
     </style>
@@ -547,7 +618,7 @@
         function getFormattedDate() {
             const date = new Date();
             const options = { day: 'numeric', month: 'short', year: 'numeric' };
-            return date.toLocaleDateString('en-GB', options); 
+            return date.toLocaleDateString('en-GB', options);
         }
 
         function updateDisplay() {
@@ -614,10 +685,8 @@
 
         window.confirmSave = async function() {
             const sessionName = logInput.value.trim();
-            
             if (sessionName !== "") {
                 window.playSound('save');
-                
                 try {
                     await addDoc(collection(db, "studyLogs"), {
                         name: sessionName,
@@ -662,7 +731,7 @@
         }
 
         window.cachedLogs = [];
-
+        
         const logsQuery = query(collection(db, "studyLogs"), orderBy("timestamp", "desc"));
         onSnapshot(logsQuery, (snapshot) => {
             const logs = [];
@@ -699,7 +768,7 @@
         }
 
         function calculateDailyTotal(logs) {
-            const today = getFormattedDate(); 
+            const today = getFormattedDate();
             let totalSeconds = 0;
 
             logs.forEach(log => {
@@ -710,16 +779,16 @@
                     }
                 }
             });
-
+            
             const h = Math.floor(totalSeconds / 3600);
             const m = Math.floor((totalSeconds % 3600) / 60);
             const s = totalSeconds % 60;
-
+            
             let timeStr = '';
             if (h > 0) timeStr += `${h}h `;
             if (m > 0 || h > 0) timeStr += `${m}m `;
             timeStr += `${s}s`;
-
+            
             if(totalSeconds === 0) timeStr = "0s";
 
             dailyTotalDisplay.textContent = timeStr;
