@@ -1,410 +1,617 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Happy Best Friendship Day! 💙</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Blue Heart Journey</title>
 
-    <style>
-        :root {
-            --space-bg: #000000;
-            --text-color: #ffffff;
-            --font-sans: 'Plus Jakarta Sans', sans-serif;
-            --font-serif: 'Playfair Display', serif;
-        }
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Cormorant+Garamond:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: var(--font-sans);
-            background-color: var(--space-bg);
-            color: var(--text-color);
-        }
+    body {
+      overflow: hidden;
+      background: #000;
+      font-family: 'Nunito', sans-serif;
+    }
 
-        /* --- BACKGROUND layer: Falling Stars --- */
-        #starCanvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            display: block;
-        }
+    #screen1 {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #000;
+      z-index: 10;
+    }
 
-        /* ========================================= */
-        /* --- SCREEN 1: ENTRY SCREEN --- */
-        /* ========================================= */
-        .screen-intro {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 10;
-            opacity: 1;
-            transition: opacity 1.5s ease-in-out;
-        }
+    #starCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
 
-        .screen-intro.hidden {
-            opacity: 0;
-            pointer-events: none;
-        }
+    .heart-wrapper {
+      position: relative;
+      cursor: pointer;
+      animation: pulse 2.2s ease-in-out infinite;
+      z-index: 2;
+    }
 
-        /* Pulsing image wrapper */
-        .heart-wrapper {
-            animation: heartPulse 3s infinite ease-in-out;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            max-width: 280px;
-            width: 70%;
-            z-index: 12;
-        }
+    .heart-image {
+      width: 200px;
+      height: 200px;
+      object-fit: contain;
+      filter:
+        drop-shadow(0 0 18px rgba(79, 172, 255, 0.35))
+        drop-shadow(0 0 42px rgba(36, 120, 255, 0.28));
+    }
 
-        .heart-wrapper:hover {
-            transform: scale(1.05);
-        }
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.07); }
+    }
 
-        .heart-wrapper img {
-            width: 100%;
-            height: auto;
-            display: block;
-        }
+    .rising-heart {
+      position: fixed;
+      bottom: -60px;
+      pointer-events: none;
+      color: #5ea8ff;
+      opacity: 0.92;
+      animation: riseUp 3.2s ease-in forwards;
+      z-index: 30;
+      text-shadow: 0 0 12px rgba(94, 168, 255, 0.45);
+    }
 
-        /* ========================================= */
-        /* --- TRANSITION LAYER: SLOW RISING HEARTS --- */
-        /* ========================================= */
-        #transitionContainer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 40;
-            pointer-events: none;
-        }
+    @keyframes riseUp {
+      0% {
+        transform: translateY(0) scale(0.6);
+        opacity: 0.95;
+      }
+      100% {
+        transform: translateY(-125vh) scale(1.7);
+        opacity: 0;
+      }
+    }
 
-        .rising-heart {
-            position: absolute;
-            background-color: #00a2ff;
-            transform: rotate(-45deg);
-            opacity: 0;
-            border-radius: 0;
-            animation: slowRise var(--duration) forwards linear;
-            box-shadow: 0 0 15px rgba(0, 162, 255, 0.6);
-        }
+    #screen2 {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      z-index: 5;
+      transition: opacity 2.5s ease;
+      background:
+        linear-gradient(rgba(7, 24, 63, 0.10), rgba(7, 24, 63, 0.16)),
+        url('https://i.ibb.co/1fWQCLjW/bg.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      overflow: hidden;
+      padding: 16px;
+    }
 
-        .rising-heart::before,
-        .rising-heart::after {
-            content: "";
-            background-color: #00a2ff;
-            border-radius: 50%;
-            position: absolute;
-        }
+    .floating-hearts {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 1;
+    }
 
-        /* ========================================= */
-        /* --- SCREEN 2: FINAL DESTINATION --- */
-        /* ========================================= */
-        .screen-final {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* Your provided full image background */
-            background-image: url('https://i.ibb.co/j9LJtg7c/bg.jpg'); 
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            opacity: 0;
-            z-index: 2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            overflow-y: auto;
-            transition: opacity 2.5s ease-in-out; /* Slow elegant fade in */
-            pointer-events: none;
-        }
+    .floating-hearts span {
+      position: absolute;
+      color: rgba(44, 104, 210, 0.88);
+      filter: blur(0.2px);
+      animation: drift 8s ease-in-out infinite;
+      text-shadow: 0 0 18px rgba(78, 145, 255, 0.18);
+    }
 
-        /* Fallback gradient in case imgbb wrapper page blocks direct CSS background rendering */
-        .screen-final::before {
-            content: '';
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, rgba(7,15,26,0.6), rgba(16,37,61,0.6));
-            z-index: -1;
-        }
+    .floating-hearts span:nth-child(1) { top: 8%; left: 8%; font-size: 52px; animation-delay: 0s; }
+    .floating-hearts span:nth-child(2) { top: 18%; right: 12%; font-size: 72px; animation-delay: 1.2s; }
+    .floating-hearts span:nth-child(3) { top: 42%; left: 7%; font-size: 88px; animation-delay: 2s; }
+    .floating-hearts span:nth-child(4) { top: 28%; right: 6%; font-size: 110px; animation-delay: 1.7s; }
+    .floating-hearts span:nth-child(5) { bottom: 17%; left: 10%; font-size: 70px; animation-delay: 2.8s; }
+    .floating-hearts span:nth-child(6) { bottom: 10%; right: 9%; font-size: 120px; animation-delay: 0.8s; }
+    .floating-hearts span:nth-child(7) { top: 55%; right: 18%; font-size: 46px; animation-delay: 3.2s; }
+    .floating-hearts span:nth-child(8) { top: 60%; left: 22%; font-size: 36px; animation-delay: 2.2s; }
 
-        .screen-final.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
+    @keyframes drift {
+      0%, 100% { transform: translateY(0px) scale(1); }
+      50% { transform: translateY(-10px) scale(1.04); }
+    }
 
-        /* Text Content Container Card */
-        .letter-content {
-            width: 100%;
-            max-width: 650px;
-            padding: 45px 35px;
-            background: rgba(10, 25, 47, 0.75); /* Sophisticated dark translucent plate to ensure 100% text readability over any background image */
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            border-radius: 16px;
-            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.4);
-            text-align: center;
-            transform: translateY(30px);
-            transition: transform 2.5s cubic-bezier(0.16, 1, 0.3, 1);
-        }
+    .letter-stage {
+      position: relative;
+      z-index: 3;
+      width: min(92vw, 620px);
+      max-height: 92vh;
+      animation: cardRise 1.8s cubic-bezier(.2,.8,.2,1) both;
+      animation-delay: 0.25s;
+      opacity: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
 
-        .screen-final.active .letter-content {
-            transform: translateY(0);
-        }
+    @keyframes cardRise {
+      0% {
+        transform: translateY(42px) scale(0.96);
+        opacity: 0;
+      }
+      100% {
+        transform: translateY(0) scale(1);
+        opacity: 1;
+      }
+    }
 
-        .wishes-title {
-            font-family: var(--font-serif);
-            font-size: 2.2rem;
-            font-weight: 600;
-            color: #ffffff;
-            margin-bottom: 30px;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 10px rgba(0, 162, 255, 0.3);
-        }
+    .letter-paper {
+      position: relative;
+      width: 100%;
+      max-height: 92vh;
+      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(245,248,253,0.96));
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow:
+        0 20px 50px rgba(6, 26, 77, 0.22),
+        0 0 0 1px rgba(120, 160, 220, 0.18),
+        inset 0 0 0 1px rgba(255,255,255,0.7);
+      overflow: hidden;
+    }
 
-        .letter-text {
-            color: #e2e8f0;
-            font-size: 1.05rem;
-            line-height: 1.8;
-            text-align: left;
-            font-weight: 400;
-        }
+    .letter-paper::before {
+      content: "";
+      position: absolute;
+      inset: 10px;
+      border: 2px solid rgba(129, 156, 191, 0.55);
+      border-radius: 12px;
+      pointer-events: none;
+    }
 
-        .letter-text p {
-            margin-bottom: 20px;
-        }
+    .letter-paper::after {
+      content: "";
+      position: absolute;
+      inset: 18px;
+      border: 1px solid rgba(157, 178, 207, 0.5);
+      border-radius: 8px;
+      pointer-events: none;
+    }
 
-        .letter-footer {
-            margin-top: 35px;
-            padding-top: 20px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            font-size: 0.95rem;
-            color: #94a3b8;
-        }
+    .heart-border {
+      position: absolute;
+      inset: 8px;
+      pointer-events: none;
+      border-radius: 16px;
+      overflow: hidden;
+    }
 
-        .signature {
-            font-family: var(--font-serif);
-            font-style: italic;
-            font-size: 1.1rem;
-            color: #ffffff;
-            margin-top: 8px;
-            font-weight: 500;
-        }
+    .heart-border .top,
+    .heart-border .bottom {
+      position: absolute;
+      left: 18px;
+      right: 18px;
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #75aee8;
+      opacity: 0.95;
+      letter-spacing: 1px;
+    }
 
-        /* ========================================= */
-        /* --- ANIMATION KEYFRAMES --- */
-        /* ========================================= */
-        @keyframes heartPulse {
-            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px rgba(0,162,255,0.4)); }
-            50% { transform: scale(1.06); filter: drop-shadow(0 0 25px rgba(0,162,255,0.8)); }
-        }
+    .heart-border .top { top: 6px; }
+    .heart-border .bottom { bottom: 6px; }
 
-        @keyframes slowRise {
-            0% {
-                transform: translateY(105vh) translateX(0) rotate(-45deg) scale(0.5);
-                opacity: 0;
-            }
-            10% {
-                opacity: 0.8;
-            }
-            90% {
-                opacity: 0.9;
-            }
-            100% {
-                transform: translateY(-15vh) translateX(var(--drift)) rotate(-45deg) scale(var(--final-scale));
-                opacity: 0;
-            }
-        }
+    .heart-border .left,
+    .heart-border .right {
+      position: absolute;
+      top: 18px;
+      bottom: 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #75aee8;
+      opacity: 0.95;
+    }
 
-        /* Mobile Optimization responsive values */
-        @media (max-width: 500px) {
-            .letter-content { padding: 30px 20px; }
-            .wishes-title { font-size: 1.6rem; margin-bottom: 20px; }
-            .letter-text { font-size: 0.92rem; line-height: 1.7; }
-        }
-    </style>
+    .heart-border .left { left: 6px; }
+    .heart-border .right { right: 6px; }
+
+    .letter-inner {
+      position: relative;
+      z-index: 2;
+      padding: 42px 38px 28px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      max-height: calc(92vh - 40px);
+    }
+
+    .letter-heading {
+      text-align: center;
+      color: #184a92;
+      line-height: 0.95;
+      margin-top: 12px;
+      margin-bottom: 18px;
+      text-shadow: 0 2px 10px rgba(71, 127, 207, 0.08);
+      flex-shrink: 0;
+    }
+
+    .letter-heading .line1,
+    .letter-heading .line2 {
+      display: block;
+      font-family: 'Great Vibes', cursive;
+      font-weight: 400;
+    }
+
+    .letter-heading .line1 {
+      font-size: clamp(2.8rem, 5.2vw, 4.4rem);
+    }
+
+    .letter-heading .line2 {
+      font-size: clamp(2.6rem, 5vw, 4.2rem);
+      margin-top: 6px;
+    }
+
+    .message-window {
+      width: min(100%, 420px);
+      max-height: min(38vh, 320px);
+      margin-top: 12px;
+      background: linear-gradient(180deg, rgba(240,245,252,0.88), rgba(248,250,255,0.74));
+      border-radius: 20px;
+      box-shadow:
+        inset 0 0 0 1px rgba(197, 214, 236, 0.55),
+        0 10px 30px rgba(173, 197, 231, 0.18);
+      padding: 24px 22px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      scroll-behavior: smooth;
+      flex-shrink: 1;
+    }
+
+    .message-window::-webkit-scrollbar {
+      width: 6px;
+    }
+
+    .message-window::-webkit-scrollbar-track {
+      background: transparent;
+    }
+
+    .message-window::-webkit-scrollbar-thumb {
+      background: rgba(102, 154, 225, 0.45);
+      border-radius: 999px;
+    }
+
+    .message-window::-webkit-scrollbar-thumb:hover {
+      background: rgba(83, 138, 216, 0.7);
+    }
+
+    .message {
+      color: #28456e;
+      text-align: left;
+      font-family: 'Cormorant Garamond', serif;
+      font-size: clamp(1.2rem, 2.05vw, 1.45rem);
+      line-height: 1.55;
+    }
+
+    .message p {
+      margin-bottom: 14px;
+    }
+
+    .message .dear {
+      font-weight: 700;
+      color: #1f4a8f;
+      font-size: 1.55em;
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .message .sign {
+      margin-top: 18px;
+      text-align: left;
+    }
+
+    .message .sign-name {
+      font-family: 'Great Vibes', cursive;
+      font-size: 2rem;
+      color: #1d58a1;
+      line-height: 1.1;
+      margin-top: 6px;
+    }
+
+    .bottom-decor {
+      margin-top: 20px;
+      text-align: center;
+      color: #6d90b6;
+      flex-shrink: 0;
+    }
+
+    .bottom-hearts {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      font-size: 22px;
+      margin-bottom: 14px;
+    }
+
+    .bottom-hearts span:nth-child(2) {
+      font-size: 30px;
+      color: #d9dee7;
+      text-shadow: 0 1px 1px rgba(0,0,0,0.05);
+    }
+
+    .bottom-date {
+      font-family: 'Nunito', sans-serif;
+      font-weight: 700;
+      letter-spacing: 1.7px;
+      text-transform: uppercase;
+      font-size: 0.76rem;
+      color: #365a8f;
+    }
+
+    @media (max-width: 768px) {
+      .heart-image {
+        width: 150px;
+        height: 150px;
+      }
+
+      .letter-stage {
+        width: min(94vw, 560px);
+        max-height: 94vh;
+      }
+
+      .letter-paper {
+        max-height: 94vh;
+        padding: 14px;
+        border-radius: 16px;
+      }
+
+      .letter-inner {
+        padding: 34px 22px 22px;
+        max-height: calc(94vh - 28px);
+      }
+
+      .message-window {
+        width: 100%;
+        max-height: min(34vh, 280px);
+        border-radius: 18px;
+        padding: 18px 16px;
+      }
+
+      .bottom-date {
+        font-size: 0.66rem;
+        letter-spacing: 1.2px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .message {
+        font-size: 1.12rem;
+      }
+
+      .message .sign-name {
+        font-size: 1.7rem;
+      }
+
+      .letter-heading .line1 {
+        font-size: clamp(2.3rem, 10vw, 3.2rem);
+      }
+
+      .letter-heading .line2 {
+        font-size: clamp(2.1rem, 9vw, 3rem);
+      }
+
+      .message-window {
+        max-height: min(32vh, 240px);
+      }
+    }
+  </style>
 </head>
 <body>
-
+  <div id="screen1">
     <canvas id="starCanvas"></canvas>
+    <div class="heart-wrapper" id="heartButton" aria-label="Open the letter" role="button">
+      <img
+        src="https://i.ibb.co/ZRGd4VBK/heart-with-gift-wrap.png"
+        alt="Blue heart gift"
+        class="heart-image"
+      />
+    </div>
+  </div>
 
-    <div class="screen-intro" id="screenIntro">
-        <div class="heart-wrapper" id="heartBtn">
-            <img src="https://i.ibb.co/ZRGd4VBK/heart-with-gift-wrap.png" alt="Gift Wrapped Heart">
-        </div>
+  <div id="screen2">
+    <div class="floating-hearts">
+      <span>💙</span>
+      <span>💙</span>
+      <span>💙</span>
+      <span>💙</span>
+      <span>💙</span>
+      <span>💙</span>
+      <span>💙</span>
+      <span>💙</span>
     </div>
 
-    <div id="transitionContainer"></div>
-
-    <div class="screen-final" id="screenFinal">
-        <div class="letter-content">
-            <h1 class="wishes-title">Happy International Best Friend Day!</h1>
-            
-            <div class="letter-text">
-                <p>My Dear Kana,</p>
-                
-                <p>Happy Best Friendship Day!</p>
-                
-                <p>I was just thinking about us, and I wanted to take today as an opportunity to tell you how incredibly grateful I am to have a person like you in my life. You bring so much care and happiness into my life, and honestly, things would be so dull without you now.</p>
-                
-                <p>What I love most about you is how beautifully you balance being absolutely cute with being incredibly mature. It’s a rare combination, Kana, and it makes you so special. Your heart is so big and you care so deeply for everyone around you, whether it’s your family, Aufi or other cats, your friends, or even someone like me who is thousands of miles away from you.</p>
-                
-                <p>Distance doesn’t change how real and comforting your presence feels in my life, and that is a true testament to how wonderful you are as a person.</p>
-                
-                <p>Thank you for being my constant, for your kindness, and for just being you. I am so lucky to call you my bestie.</p>
-            </div>
-
-            <div class="letter-footer">
-                With all my love,
-                <div class="signature">'Someone who cares about you from thousands of miles away'</div>
-            </div>
+    <div class="letter-stage">
+      <div class="letter-paper">
+        <div class="heart-border">
+          <div class="top">
+            <span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span>
+          </div>
+          <div class="bottom">
+            <span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span>
+          </div>
+          <div class="left">
+            <span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span>
+          </div>
+          <div class="right">
+            <span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span><span>♡</span><span>💙</span>
+          </div>
         </div>
+
+        <div class="letter-inner">
+          <div class="letter-heading">
+            <span class="line1">Dearest</span>
+            <span class="line2">Best Friend,</span>
+          </div>
+
+          <div class="message-window">
+            <div class="message">
+              <p class="dear">My Dear Kana,</p>
+
+              <p>Happy Best Friendship Day!</p>
+
+              <p>
+                I was just thinking about us, and I wanted to take today as an
+                opportunity to tell you how incredibly grateful I am to have a person
+                like you in my life. You bring so much care and happiness into my
+                life, and honestly, things would be so dull without you now.
+              </p>
+
+              <p>
+                What I love most about you is how beautifully you balance being
+                absolutely cute with being incredibly mature. It’s a rare
+                combination, Kana, and it makes you so special.
+              </p>
+
+              <p>
+                Your heart is so big and you care so deeply for everyone around you,
+                whether it’s your family, Aufi or other cats, your friends, or even
+                someone like me who is thousands of miles away from you. Distance
+                doesn’t change how real and comforting your presence feels in my
+                life, and that is a true testament to how wonderful you are as a
+                person.
+              </p>
+
+              <p>
+                Thank you for being my constant, for your kindness, and for just
+                being you. I am so lucky to call you my bestie.
+              </p>
+
+              <div class="sign">
+                <p>With all my love,</p>
+                <div class="sign-name">Someone who cares about you<br>from thousands of miles away</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="bottom-decor">
+            <div class="bottom-hearts">
+              <span>♡</span>
+              <span>🤍</span>
+              <span>💙</span>
+            </div>
+            <div class="bottom-date">International Best Friend Day | June 8th</div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <script>
-        /* --- 1. Background Starfield Logic --- */
-        const canvas = document.getElementById('starCanvas');
-        const ctx = canvas.getContext('2d');
-        let stars = [];
-        const numStars = 100;
+  <script>
+    const canvas = document.getElementById('starCanvas');
+    const ctx = canvas.getContext('2d');
 
-        function resizeCanvas() {
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
-        }
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
 
-        for (let i = 0; i < numStars; i++) {
-            stars.push({
-                x: Math.random() * canvas.width,
-                y: Math.random() * canvas.height,
-                radius: Math.random() * 1.2 + 0.4,
-                speed: Math.random() * 0.3 + 0.1,
-                alpha: Math.random() * 0.5 + 0.5
-            });
-        }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
 
-        function animateStars() {
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            ctx.fillStyle = '#fff';
-            for (let i = 0; i < numStars; i++) {
-                let s = stars[i];
-                ctx.globalAlpha = s.alpha;
-                ctx.beginPath();
-                ctx.arc(s.x, s.y, s.radius, 0, Math.PI * 2);
-                ctx.fill();
+    const stars = [];
+    const numStars = 150;
 
-                s.y += s.speed;
-                if (s.y > canvas.height) {
-                    s.y = 0;
-                    s.x = Math.random() * canvas.width;
-                }
-            }
-            ctx.globalAlpha = 1;
-            requestAnimationFrame(animateStars);
-        }
-        animateStars();
+    class Star {
+      constructor() {
+        this.reset(true);
+      }
 
-        /* --- 2. Slow Rising Hearts Transition Handler --- */
-        const heartBtn = document.getElementById('heartBtn');
-        const screenIntro = document.getElementById('screenIntro');
-        const screenFinal = document.getElementById('screenFinal');
-        const transitionContainer = document.getElementById('transitionContainer');
+      reset(initial = false) {
+        this.x = Math.random() * canvas.width;
+        this.y = initial
+          ? Math.random() * canvas.height
+          : -10 - Math.random() * 100;
+        this.size = Math.random() * 1.8 + 0.5;
+        this.speed = Math.random() * 1.2 + 0.35;
+        this.opacity = Math.random() * 0.45 + 0.15;
+        this.color = Math.random() > 0.68 ? '#87ceeb' : '#ffffff';
+      }
 
-        heartBtn.addEventListener('click', () => {
-            // Lock double click actions
-            heartBtn.style.pointerEvents = 'none';
+      update() {
+        this.y += this.speed;
+        if (this.y > canvas.height + 10) this.reset();
+      }
 
-            // Generate slow rising heart mass continuously over a small window
-            let spawnInterval = setInterval(() => {
-                createSlowHeart();
-            }, 25);
+      draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.globalAlpha = this.opacity;
+        ctx.fill();
+        ctx.globalAlpha = 1;
+      }
+    }
 
-            // Turn off spawn cycle after a blanket is established
-            setTimeout(() => {
-                clearInterval(spawnInterval);
-            }, 2200);
+    for (let i = 0; i < numStars; i++) stars.push(new Star());
 
-            // Gracefully step out Screen 1
-            setTimeout(() => {
-                screenIntro.classList.add('hidden');
-            }, 1200);
+    function animateStars() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      for (const star of stars) {
+        star.update();
+        star.draw();
+      }
+      requestAnimationFrame(animateStars);
+    }
 
-            // Gracefully fade in Screen 2 while hearts are rising and blanketing screen
-            setTimeout(() => {
-                screenFinal.classList.add('active');
-            }, 2600);
+    animateStars();
 
-            // Clean up transition structural memory elements entirely
-            setTimeout(() => {
-                transitionContainer.remove();
-                canvas.remove();
-            }, 7500);
-        });
+    const heartButton = document.getElementById('heartButton');
+    const screen1 = document.getElementById('screen1');
+    const screen2 = document.getElementById('screen2');
+    let transitionStarted = false;
 
-        function createSlowHeart() {
-            const heart = document.createElement('div');
-            heart.classList.add('rising-heart');
+    heartButton.addEventListener('click', () => {
+      if (transitionStarted) return;
+      transitionStarted = true;
 
-            // Set size properties dynamically
-            const size = Math.random() * 24 + 12;
-            const sizePx = size + 'px';
-            heart.style.width = sizePx;
-            heart.style.height = sizePx;
+      for (let i = 0; i < 150; i++) {
+        setTimeout(() => {
+          const heart = document.createElement('div');
+          heart.className = 'rising-heart';
+          heart.innerHTML = '💙';
+          heart.style.left = Math.random() * 100 + '%';
+          heart.style.fontSize = (Math.random() * 18 + 16) + 'px';
+          heart.style.animationDuration = (Math.random() * 0.8 + 2.8) + 's';
+          document.body.appendChild(heart);
 
-            // Generate structural styles for dynamic pseudo elements matching sizes
-            const style = document.createElement('style');
-            const pId = 'h-' + Math.random().toString(36).substr(2, 9);
-            heart.setAttribute('data-id', pId);
-            style.innerHTML = `
-                .rising-heart[data-id="${pId}"]::before { width: ${sizePx}; height: ${sizePx}; top: -${size/2}px; left: 0; }
-                .rising-heart[data-id="${pId}"]::after { width: ${sizePx}; height: ${sizePx}; left: ${size/2}px; top: 0; }
-            `;
-            document.head.appendChild(style);
+          setTimeout(() => heart.remove(), 4200);
+        }, i * 16);
+      }
 
-            // Layout positioning horizontally across base of viewports
-            heart.style.left = (Math.random() * 100) + 'vw';
+      setTimeout(() => {
+        screen1.style.transition = 'opacity 1.2s ease-out';
+        screen1.style.opacity = '0';
+      }, 1200);
 
-            // Custom travel properties variables
-            const duration = Math.random() * 3 + 3.5; // Slow movement timing window (3.5 - 6.5 seconds)
-            const drift = Math.random() * 160 - 80;
-            const scaleFactor = Math.random() * 2 + 1.5;
+      setTimeout(() => {
+        screen1.style.display = 'none';
+      }, 2400);
 
-            heart.style.setProperty('--duration', duration + 's');
-            heart.style.setProperty('--drift', drift + 'px');
-            heart.style.setProperty('--final-scale', scaleFactor);
-
-            transitionContainer.appendChild(heart);
-
-            // Self cleanup DOM node collection rule
-            setTimeout(() => {
-                heart.remove();
-                style.remove();
-            }, duration * 1000);
-        }
-    </script>
+      setTimeout(() => {
+        screen2.style.opacity = '1';
+      }, 2600);
+    });
+  </script>
 </body>
 </html>
